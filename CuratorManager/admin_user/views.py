@@ -30,8 +30,6 @@ def reportMatch(request):
     return render(request,'admin_user/reports/report1.html',{"records":"none"})
 
 
-
-
 def fetch_tournaments(request):
     match_type = request.GET.get("match_type")
     season_year = request.GET.get("season_year")
@@ -249,6 +247,8 @@ def fetch_match_records(request):
 			`vmm`.`out_roller_machinery_name_operator`,
 			`vmm`.`passes_unit`,
 			`vmm`.`out_passes_unit`,
+			`vmm`.`rolling_date`,
+			`vmm`.`out_rolling_date`,
           
           vgm.ground_name, vgm.city_name, vgm.state_name, vgm.org_id, vgm.count_main_pitches,
           vgm.count_practice_pitches,
