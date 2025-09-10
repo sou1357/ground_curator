@@ -1,0 +1,414 @@
+.box-blue-sky {
+  background-image: url("../img/blue-sky.ab4f2c64e988.jpg");
+}
+
+.grass-bg {
+  background-size: 100%;
+  background-repeat: repeat-y;
+  /* background-image: url("../img/greenbg.8ca328ab2d22.jpg"); */
+  /* background-color: rgb(6, 99, 141); */
+  /* background-color:#2255A4; */
+  background-color: rgb(1, 1, 66);
+}
+
+.blue-bg {
+  background-size: cover;
+  background-image: url("../img/blue-bg.4c9440f126d4.jpeg");
+}
+
+.side-menu-border {
+  background-color: rgb(27, 27, 27);
+  border-right: white 2px solid;
+}
+
+div {
+  color: white;
+}
+
+label {
+  color: white !important;
+}
+
+legend {
+  color: white !important;
+}
+
+.border-white {
+  border: 2px solid white;
+}
+
+hr {
+  background-color: white !important;
+  height: 1px;
+}
+
+body {
+  /* background: linear-gradient(45deg, #6dace8 40%, #1d66ed 56%) */
+
+}
+
+
+
+.box-gradient {
+
+  background: linear-gradient(10deg, #1a86eb 40%, #1d66ed 56%)
+}
+
+.box-bg {
+  background: linear-gradient(45deg, #131a66, #1121cd) !important;
+  /* background: linear-gradient(to bottom, #6f6f70, #e2e1e3, #c6c6c5);color: #333333; */
+}
+
+.profile-box-title {
+  background-color: rgba(240, 240, 240, 0.184);
+  color: rgb(255, 255, 255);
+
+  height: fit-content;
+  align-self: center;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+.profile-box-details {
+  align-self: center;
+
+  color: white;
+}
+
+.club-details>li {
+  background: transparent !important;
+  border: 0;
+
+}
+
+.list-group-item {
+  background: rgba(255, 255, 255, 0.321);
+  color: white;
+}
+
+.change-role-box li {
+  background-color: rgba(255, 255, 255, 0.193) !important;
+  color: white;
+}
+
+/* input,
+label,
+select,
+button {
+  font-size: 70% !important;
+} */
+
+.chemical-remport-table {
+  border: 1px solid white !important;
+}
+
+.report-table-title th {
+  color: white !important;
+}
+
+.report-table-body {
+  background: transparent !important;
+  color: white !important;
+}
+
+.report-table-body tr {
+  background: transparent !important;
+  color: white !important;
+}
+
+table {
+  background: transparent !important;
+  color: white !important;
+}
+
+
+.container-main {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+.phone-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+
+input[type="tel"] {
+  padding: 8px;
+  margin-right: 10px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 12px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.remove-btn {
+  background-color: #dc3545;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+
+/* Default (collapsed) state */
+.match-scores-list .accordion-button {
+  /* background-color: #f8f9fa; */
+  /* Light gray */
+  color: #212529;
+  /* Dark text */
+  padding: 1% 1%;
+  font-size: 11px !important;
+}
+
+.match-scores-list .accordion-button h5 {
+  font-size: 98% !important;
+}
+
+/* Expanded (active) state */
+.match-scores-list .accordion-button:not(.collapsed) {
+  /* background-color: #606365; */
+  background-image: linear-gradient(45deg, #131a66, #1121cd);
+  padding: 3% 4%;
+  /* Blue */
+  color: white;
+  margin-bottom: 1%;
+}
+
+/* Collapsed (closed) state */
+.match-scores-list .accordion-button.collapsed {
+  background-image: linear-gradient(45deg, #131a66, #1121cd);
+  /* Yellow */
+  padding: 3% 4%;
+  margin-bottom: 1%;
+  color: #ffffff;
+}
+
+/* Optional: Body styling */
+.match-scores-list .accordion-body {
+  background-color: transparent;
+  color: #212529;
+}
+
+/* Optional: Remove default focus shadow */
+.match-scores-list .accordion-button:focus {
+  box-shadow: none;
+}
+
+.match-scores-list .gray-box {
+  margin: 20px 10px !important;
+  border: 1px solid black !important;
+}
+
+.match-scores-list::after {
+  color: white !important;
+}
+
+.match-scores-list .accordion {
+
+  background-color: transparent !important;
+}
+
+.match-scores-list .accordion-item {
+  border: 1px solid white;
+  background-color: rgba(33, 36, 42, 0.368) !important;
+  color: white !important;
+}
+
+.match-scores-list table,
+tr,
+td,
+th {
+  color: white !important;
+}
+
+#curatorsList a:link
+{
+color: white !important;
+}
+#curatorsList a:hover
+{
+color: white !important;
+}
+#curatorsList a:visited
+{
+color: white !important;
+}
+
+.daily-list .accordion-button span.record-type {
+  color: rgb(253, 254, 255) !important;
+  padding: 1% 2%;
+  background-color: #3593f83c;
+  border-radius: 10%;
+
+}
+
+.content-width-height {
+  width: fit-content !important;
+  height: fit-content !important;
+  padding: 1% 3% !important;
+
+
+}
+
+.transparent-bg {
+  background: transparent !important;
+}
+
+.light-transparent-bg {
+  background: rgba(255, 255, 255, 0.111) !important;
+}
+
+.font-70 {
+  font-size: 50% !important;
+}
+
+.input-background-light {
+  background-color: rgba(255, 255, 255, 0.202) !important;
+}
+
+
+.nav-pills .nav-link.custom1.active {
+  background-color: #f7370c;
+  color: white;
+}
+
+.nav-pills .nav-link.custom1 {
+  background-color: #eb8e79;
+  color: white;
+}
+
+.nav-pills .nav-link.custom2.active {
+  background-color: #c02109;
+  color: white;
+}
+
+.nav-pills .nav-link.custom2 {
+  background-color: #0c3698;
+  color: white;
+}
+
+
+
+ /* Styling for the details element */
+  details {
+    margin: 5px;
+    border: none; /* Remove default border */
+  }
+
+  /* Styling for the summary (which acts as our button) */
+  summary {
+    background-color: #007BFF; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding around the text */
+    border: none;
+    border-top-left-radius:5px; /* Slightly rounded corners */
+    border-top-right-radius:5px; /* Slightly rounded corners */
+    cursor: pointer; /* Indicate it's clickable */
+    font-size: 16px; /* Font size */
+    width: 100%; /* Make it span the full width of its container */
+    text-align: left; /* Align text to the left */
+    box-sizing: border-box; /* Include padding in the width */
+    display: block; /* Ensure it behaves like a block element */
+    -webkit-user-select: none; /* Prevent text selection on click */
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  .category, .subcategory
+  {
+    background-color: transparent !important;
+  }
+
+  /* Remove the default arrow/disclosure triangle from summary */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::marker {
+    display: none;
+  }
+
+  summary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+
+  /* Styling for the content when revealed */
+  details p {
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-top: none; /* No top border to blend with the summary */
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 14px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 0; /* Remove default paragraph margin */
+  }
+  details > div {
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-top: none; /* No top border to blend with the summary */
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 14px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 0; /* Remove default paragraph margin */
+  }
+
+
+  .nav-link.custom1.active{
+    padding: 1.1rem 2rem !important;
+    border: 2px solid white !important;
+    
+  }
+  .nav-link.custom2.active{
+    padding: 1.1rem 2rem !important;
+    border: 2px solid white !important;
+
+    
+  }
+
+  .all-entry-checkbox
+  {
+    width: 30px !important;
+    height: 30px !important;
+    margin-left: 15px;
+    vertical-align: middle;
+  }
+
+  .card-shadow
+  {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.262), 0 6px 20px 0 rgba(9, 9, 9, 0.093);
+    border-radius: 20px;
+    padding:3% !important;
+  }
+
+.summary-shadow
+{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.262), 0 6px 20px 0 rgba(9, 9, 9, 0.093);
+
+}

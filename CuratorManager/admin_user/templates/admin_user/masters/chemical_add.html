@@ -1,0 +1,62 @@
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+
+        <div class="container mt-5">
+            <div class="card w-50 mx-auto">
+                <div class="card-header box-bg text-white">
+
+                    <i class="bi bi-person-check me-2 text-info"></i>Add Chemical
+                </div>
+                <div class="card-body box-gradient rounded-bottom">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="form-control py-2" type="text" name="chemical_name" required
+                            placeholder="Chemical Name">
+
+                        <select id="chemical_type_select" name="chemical_type_select" class="form-control mt-3">
+                            <option value="">Select Chemical Type</option>
+                        </select>
+                        <button class="btn box-bg mt-4 text-white" type="submit">Add</button>
+                        <a class="btn btn-warning ms-2" href="{% url 'fertilizer_list' %}">List</a>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% include "admin_user/footertags.html" %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        axios.get("/usr_admin/get-chemical-types/")
+            .then(response => {
+                const types = response.data.types;
+                const select = document.getElementById("chemical_type_select");
+
+                types.forEach(type => {
+                    const option = document.createElement("option");
+                    option.value = type;
+                    option.textContent = type;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching chemical types:", error);
+            });
+    });
+</script>

@@ -1,0 +1,796 @@
+
+  <style>
+    body {
+      background-color: #f0f4ff;
+    }
+
+    h2 {
+      background-color: #0d6efd;
+      color: white;
+      padding: 12px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-primary,
+    .btn-success {
+      margin-right: 10px;
+    }
+
+    table {
+      background-color: white;
+    }
+
+    th {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+   
+  </style>
+
+  <style>
+  
+
+    label {
+      font-weight: 700;
+    }
+
+  
+  </style>
+
+  <style>
+    h2 {
+      background-color: #0d6efd;
+      color: white;
+      padding: 12px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    th {
+      background-color: #0d6efd;
+      color: rgb(250, 249, 249) !important;
+    }
+
+  
+
+    .a4-sheet {
+      background: white;
+      width: 21cm;
+      /* min-height: 29.7cm; */
+      padding: 0;
+      margin: 0 auto;
+      box-shadow: none;
+
+      transition: none !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+
+
+    }
+
+    @media print {
+      body {
+        margin: 0;
+      }
+
+      .a4-sheet {
+        margin: 0;
+        height: fit-content;
+        padding: 0;
+      }
+    }
+
+   
+  </style>
+
+
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+
+ {% load admin_user_filters %}
+   
+ <div class="container mt-5">
+            <div class="card w-75 mx-auto transparent-bg">
+                <div class="card-header box-bg text-white">
+
+                    <i class="bi bi-person-check me-2 text-info"></i>Match Records
+                </div>
+                <div class="card-body box-gradient rounded-bottom">
+    <form method="get" action="/usr_admin/match-records" class="p-4 rounded">
+      <div class="row g-3">
+     
+
+        <div class="col-lg-4 col-sm-12">
+          <label for="match_type" class="form-label">Match Type</label>
+          <select id="match_type" name="match_type" class="form-select">
+            <option value="">Select Match Type</option>
+            <option value="Multidays">Multidays</option>
+            <option value="One Day">One Day</option>
+            <option value="T20">T20</option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <label for="season_year" class="form-label">Season Year</label>
+          <input type="text" id="season_year" name="season_year" class="form-control" placeholder="yyyy">
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <label for="name_tournament" class="form-label">Tournament</label>
+          <select id="name_tournament" name="name_tournament" class="form-select">
+            <option value="">Select Tournament</option>
+          </select>
+        </div>
+
+        <div class="col-lg-4 col-sm-12">
+          <label for="city_name" class="form-label">City</label>
+          <select id="city_name" name="city_name" class="form-select">
+            <option value="">Select City</option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <label for="ground_name" class="form-label">Ground</label>
+          <select id="ground_name" name="ground_name" class="form-select">
+            <option value="">Select Ground</option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <label for="match_id" class="form-label">Match</label>
+          <select id="match_id" name="match_id" class="form-select">
+            <option value="">Select Match</option>
+          </select>
+        </div>
+
+
+        <div class="col-lg-12 col-sm-12">
+          <button type="submit" class="btn btn-primary box-bg">Search</button>
+          <button id="downloadPdf" type="button" class="btn btn-danger">Download PDF</button>
+          
+          <!-- <button type="submit" formmethod="get" formaction="{% url 'download_csv' %}" class="btn btn-success">Download</button> -->
+          <!-- <button type="submit" formmethod="get" formaction="{% url 'download_pdf' %}" class="btn btn-danger">Download PDF</button> -->
+        
+        </div>
+      </div>
+    </form>
+         </div>
+            </div>
+
+        </div>
+   {% if records != "none" %}
+    {% if records %}
+    <!-- Admin Info (show only once, assuming same in all rows) -->
+    <div class="a4-sheet w-75 rounded mt-4">
+      <div class="admin-info p-4 box-bg rounded">
+        <h4 class="display-5">Admin Information</h4>
+        <ul class="list-group">
+          <!-- <li class="list-group-item">
+            <p><strong>Admin ID:</strong> {{ records.0.admin_id }}</p>
+          </li> -->
+          <li class="list-group-item">
+            <p><strong>Name:</strong> {{ records.0.admin_name }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Email:</strong> {{ records.0.admin_email }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Username:</strong> {{ records.0.admin_username }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Mobile:</strong> {{ records.0.admin_mobile }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Address:</strong> {{ records.0.admin_address }}</p>
+
+
+          </li>
+        </ul>
+
+        <h3 class="display-5">Tournament Information</h3>
+        <ul class="list-group w-50">
+          <li class="list-group-item">
+            <p><strong>Tournament:</strong> {{ records.0.name_tournament }}</p>
+          </li>
+
+          <li class="list-group-item">
+            <p><strong>Match Type:</strong> {{ records.0.match_type }}</p>
+
+          </li>
+
+          {% if records.0.match_type == "Multidays" %}
+          <li class="list-group-item text-dark">
+            <strong>Match Date :</strong>
+            <div class="text-dark"> From :{{ records.0.from_date }}</div>
+            <div class="text-dark"> To :{{ records.0.to_date }}</div>
+
+
+          </li>
+          {% else %}
+          <li class="list-group-item">
+            <p><strong>Match Date:</strong> {{ records.0.match_date }}</p>
+          </li>
+          {% endif %}
+
+          <li class="list-group-item">
+            <p><strong>Teams :</strong> {{ records.0.team1 }} <span>VS</span> {{ records.0.team2 }} </p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Neutral Curator :</strong> {{ records.0.nuteral_curator }} </p>
+
+          </li>
+
+
+
+        </ul>
+
+        <h3 class="display-5">Ground Information</h3>
+        <ul class="list-group w-50">
+          <li class="list-group-item">
+            <p><strong>Ground:</strong> {{ records.0.ground_name }}</p>
+          </li>
+          <li class="list-group-item">
+            <p><strong>State:</strong> {{ records.0.state_name }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>City:</strong> {{ records.0.city_name }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Main Pitches:</strong> {{ records.0.count_main_pitches }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Practice Pitches:</strong> {{ records.0.count_practice_pitches }}</p>
+
+          </li>
+
+        </ul>
+
+        <h3 class="display-5">Pitch Information</h3>
+        <ul class="list-group w-50">
+          <li class="list-group-item">
+            <!-- <p><strong>Pitch ID:</strong> {{ records.0.id }}</p> -->
+            <p><strong style="text-transform: uppercase;">Pitch :</strong> <strong style="text-transform: uppercase;">{{ records.0.pitch_type }}</strong> {{ records.0.pitch_placement }}</p>
+          </li>
+         
+          <li class="list-group-item">
+            <p><strong>Soil Type:</strong> {{ records.0.soil_type }}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Pitch Condition (Is Pitch Level?):</strong> {% if records.0.is_uniformtiy_of_grass == "1" %}
+              Yes
+              {% else %}
+              No
+              {% endif %}</p>
+
+          </li>
+          <li class="list-group-item">
+            <p><strong>Grass Height:</strong> {{ records.0.mowing_size }}</p>
+
+          </li>
+
+        </ul>
+
+        <div class="table-responsive mt-5">
+           {% if records.0.machinery_id %}
+          <h1>Rollers</h1>
+          <table class="table table-bordered table-striped" id="recordsTable">
+            <thead class="table-dark">
+             <tr>
+                                    <td>Machinery</td>
+                                    <td>Time</td>
+                                    <td>No. of Passes</td>
+                                    <td>Speed</td>
+                                </tr>
+            </thead>
+               
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.machinery_id|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.time_roller|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.no_of_passes|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.rolling_speed|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+          
+          </table>
+           {% endif %}
+          {% if records.0.out_mover_machinery_id %}
+          <hr>
+          <h1>Mover</h1>
+          <table class="table table-bordered table-striped" id="recordsTable">
+            <thead class="table-dark">
+                 <tr>
+                                    <td>Machinery</td>
+                                     <td>Date</td>
+                                    <td>Time of Application Mower</td>
+                                    <td>Mowing Done at MM</td>
+                                </tr>
+            </thead>
+               
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.out_mover_machinery_id|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.out_date_mowing_done_last|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.time_of_application_out_mover|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.out_mowing_done_at_mm|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+          
+          </table>
+          {% endif %}
+           {% if records.0.fertilizers_details %}
+          <hr>
+
+ <table class="table table-bordered table-striped" id="recordsTable">
+            <tr>
+                                   
+                                   
+                                    <th colspan="3">Chemical Details</th>
+                                    <th>Time</th>
+                                    <th>Chemical Remarks</th>
+                                </tr>
+                                <tr>
+                                   <td>
+                                         
+                                        <table>
+                                             {% for item in records.0.fertilizers_details|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="chemical-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endif %}
+                                            {% endfor %}
+                                          </table>
+                                          </td>
+                                    <td>
+                                             <table>
+                                             {% for item in records.0.chemical_weight|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                             </table>
+                                             </td> 
+                                    <td>
+                                              <table>
+                                             {% for item in records.0.fertilizers_unit|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+
+                                    <td>
+                                       <table>
+                                             {% for item in records.0.time_of_application_chemical|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td>
+                                       <table>
+                                             {% for item in records.0.chemical_details_remark|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+
+
+                                </tr>
+                                </table>
+                                {% endif %}
+          <!-- <h1>Outfield Rollers</h1>
+          <table class="table table-bordered table-striped" id="recordsTable">
+            <thead class="table-dark">
+              <tr>
+                <th>Date</th>
+                <th>Machinery</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in records %}
+              <tr>
+                {% for key, value in row.items %}
+                {% if 'out_machinery_name' == key %}
+                <td>{{ row.preparation_date }}</td>
+                <td>{{ value }}</td>
+                <td>{{ row.print_details }}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <hr>
+          <h1>Outfield Mover</h1>
+          <table class="table table-bordered table-striped" id="recordsTable">
+            <thead class="table-dark">
+              <tr>
+                <th>Date</th>
+                <th>Machinery</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in records %}
+              <tr>
+                {% for key, value in row.items %}
+                {% if 'out_mover_machinery_name' == key %}
+                <td>{{ row.preparation_date }}</td>
+                <td>{{ value }}</td>
+                <td>{{ row.print_details }}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table> -->
+          {% else %}
+          <p>No records found.</p>
+          {% endif %}
+        </div>
+
+        <!-- Match Records Table -->
+
+      </div>
+    </div>
+   {% else %}
+
+    <div class="text-danger" id="no-records"></div>
+    {% endif %}
+  
+  
+
+  </div>
+</div>
+
+
+{% include "admin_user/footertags.html" %}
+
+
+  <script>
+    $(document).ready(function () {
+      // Fetch tournaments
+      function fetchMatch() {
+        const match_type = $('#match_type').val();
+        const season_year = $('#season_year').val();
+        if (match_type && season_year) {
+          $.get('/usr_admin/fetch-tournaments/', { match_type, season_year }, function (data) {
+            // console.log(data.tournaments)
+            $('#name_tournament').html('<option value="">Select Tournament</option>');
+            data.tournaments.forEach(t => {
+              $('#name_tournament').append(`<option value="${t}">${t}</option>`);
+            });
+          });
+        }
+      }
+      $('#match_type, #season_year').on('change', function () {
+fetchMatch()
+      });
+//       $('#match_type, #season_year',"#name_tournament").on({
+//   change: fetchMatch(),
+ 
+//   click: fetchMatch()
+// });
+
+      // Fetch cities
+      function fetchCities()
+      {
+        
+      }
+      $('#name_tournament').on('change', function () {
+        const name_tournament = $(this).val();
+        if (name_tournament) {
+          $.get('/usr_admin/fetch-cities/', { name_tournament }, function (data) {
+            $('#city_name').html('<option value="">Select City</option>');
+            data.cities.forEach(c => {
+              $('#city_name').append(`<option value="${c}">${c}</option>`);
+            });
+          });
+        }
+      });
+
+      // Fetch grounds
+      $('#city_name').on('change', function () {
+        const city_name = $(this).val();
+        const name_tournament = $('#name_tournament').val();
+        if (city_name && name_tournament) {
+          $.get('/usr_admin/fetch-grounds/', { name_tournament, city_name }, function (data) {
+            $('#ground_name').html('<option value="">Select Ground</option>');
+            data.grounds.forEach(g => {
+              $('#ground_name').append(`<option value="${g.id}">${g.name}</option>`);
+            });
+          });
+        }
+      });
+
+      // Fetch matches
+      $('#ground_name').on('change', function () {
+        const ground_id = $(this).val();
+        const name_tournament = $('#name_tournament').val();
+        if (ground_name && name_tournament) {
+          $.get('/usr_admin/fetch-matches/', { name_tournament, ground_id }, function (data) {
+            $('#match_id').html('<option value="">Select Match</option>');
+            data.matches.forEach(m => {
+              $('#match_id').append(`<option value="${m.id}">${m.label}</option>`);
+            });
+          });
+        }
+      });
+    });
+  </script>
+
+
+
+
+  <script>
+    document.getElementById('downloadPdf').addEventListener('click', () => {
+      const element = document.querySelector('.a4-sheet');
+      const opt = {
+        margin: 0,
+        filename: 'match_report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, scrollY: 0 },  // scrollY avoids offset
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("match_type").value = "{{request.GET.match_type}}"
+      document.getElementById("season_year").value = "{{request.GET.season_year}}"
+      // document.getElementById("name_tournament").value="{{request.GET.name_tournament}}"
+      // document.getElementById("city_name").value="{{request.GET.city_name}}"
+      // document.getElementById("ground_name").value="{{request.GET.ground_name}}"
+      // document.getElementById("match_id").value="{{request.GET.match_id}}"
+      const downloadBtn = document.createElement("button");
+      downloadBtn.textContent = "Download CSV";
+      downloadBtn.className = "btn btn-success";
+      downloadBtn.id = "downloadCsv";
+      document.querySelector(".btn-primary").after(downloadBtn);
+
+      downloadBtn.addEventListener("click", function () {
+        let csvContent = "";
+
+        // Extract Admin/Ground/Pitch Information
+        document.querySelectorAll(".a4-sheet ul.list-group").forEach(section => {
+          section.querySelectorAll("li").forEach(item => {
+            const label = item.querySelector("strong")?.innerText || "";
+            const value = item.innerText.replace(label, "").trim();
+            csvContent += `"${label}","${value}"\n`;
+          });
+          csvContent += "\n";
+        });
+
+        // Extract All Tables (like Main Rollers, Outfield Mover etc.)
+        document.querySelectorAll(".a4-sheet table").forEach(table => {
+          // Title Above Table
+          const heading = table.previousElementSibling?.tagName === "H1" ? table.previousElementSibling.innerText : "Table";
+
+          csvContent += `"${heading}"\n`;
+
+          const rows = table.querySelectorAll("tr");
+          rows.forEach(row => {
+            const cols = Array.from(row.children).map(cell => `"${cell.innerText.trim()}"`);
+            csvContent += cols.join(",") + "\n";
+          });
+          csvContent += "\n";
+        });
+
+        // Create and trigger download
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", "match_report.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    });
+
+    
+          function getChemical(div) {
+            const chemicalli = $(div).find(".chemical-id td")
+
+            Array.from(chemicalli).forEach(li => {
+                let id=$(li).text().trim()
+
+                axios.get(`/usr_admin/get_chemical/${id}`).then((result) => {
+                    const chem = result.data
+
+                    $(li).html(chem.name)
+
+                }).catch((error) => {
+                    console.log(error)
+
+                })
+            });
+
+        }
+
+  function getMachine() {
+         
+            const liMach = $(document).find(".machinery-id td")
+
+            Array.from(liMach).forEach(li => {
+                let id=$(li).text().trim()
+
+                axios.get(`/usr_admin/machinery/${id}`).then((result) => {
+                    const m = result.data.machinery
+
+                    $(li).html(m.print_details)
+
+                }).catch((error) => {
+                    console.log(error)
+
+                })
+            });
+ getChemical(document)
+            
+        }
+
+        getMachine()
+  </script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</body>
+
+</html>

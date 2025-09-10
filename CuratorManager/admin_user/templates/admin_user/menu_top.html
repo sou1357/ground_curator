@@ -1,0 +1,342 @@
+<nav class="navbar navbar-expand-lg" style="background-color: transparent !important;">
+  <div class="container-fluid">
+    <button type="button" id="sidebarCollapse" class="btn box-bg text-white">
+      <i class="bi bi-list"></i>
+    </button>
+    <div class="ms-auto">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle text-white"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#staticBackdropProfileData">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Curators/Groundmen</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<script>
+  function changeMenuTitle(title) {
+    document.querySelector("#menu-page-title").innerHTML = title
+  }
+
+  
+
+  
+  const getWeather = (y, m, d) => {
+
+    // Define your API key, location, and the date you want to get the forecast for
+    const apiKey = 'f201a1e4b5cf4e87a66103535240211';
+    const loc = 'Nagpur';
+    const date = `${y}/${m}/${d}` // Replace with your desired date (YYYY-MM-DD)
+
+    // Construct the API URL for the forecast
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${loc}&dt=${date}&aqi=no`;
+
+    // Fetch the weather data
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        // Extract the forecast data for the day
+        const forecast = data.forecast.forecastday[0].day;
+
+        // Get the min, max temperature and weather condition description
+        const minTemp = forecast.mintemp_c;
+        const maxTemp = forecast.maxtemp_c;
+        const condition = forecast.condition.text;
+        const cityName = data.location.name;
+        const countryName = data.location.country;
+
+        try
+        { 
+      document.getElementById("min_temp").value = minTemp
+        document.getElementById("max_temp").value = maxTemp
+        document.getElementById("forecast").value = condition
+        }
+        catch(e)
+        {
+          console.error("Error setting weather data:", e);
+        }
+
+        try
+        {
+          document.getElementById("min_temp").innerHTML = minTemp
+        document.getElementById("max_temp").innerHTML = maxTemp
+        document.getElementById("forecast").innerHTML = condition
+            document.getElementById("city_name").innerHTML = cityName
+        document.getElementById("country_name").innerHTML = countryName
+        document.querySelector(".current-date").innerHTML = `${String(y).padStart(2, '0')}/${String(m).padStart(2, '0')}/${String(d).padStart(2, '0')}`
+        }
+        catch(e)
+        {
+          console.error("Error setting current date:", e);
+        }
+
+      })
+      .catch(error => console.error('Error fetching weather data:', error));
+  }
+
+function setCurators() {
+   axios.get("{% url 'getCurators' %}")
+   .then((result) => {
+    const curatorsListUL = document.getElementById('curatorsList');
+    curatorsListUL.innerHTML = ""; // Reset list
+ console.log(result.data)
+
+    // Group by equipment_name, then by type, and model within each type
+    if( result.data.curators.length === 0) {
+      curatorsListUL.innerHTML = `<li class="list-group-item rounded">No Curators Available</li>`;
+      return;
+    }
+    
+    result.data.curators.forEach((curator) => {
+       curatorsListUL.innerHTML += `<li class="list-group-item mb-1 rounded">
+               <a href="/usr_admin/login_auth_role_direct?id=${curator[0]}&role=Curator">${curator[1]} <small>Click for Dashbaord</small></a>
+             </li>`;
+
+   
+    });
+  }).catch((error) => {
+    console.log("Error fetching Curators data:", error);
+   });
+  
+}
+function setGroundmans() {
+   axios.get("{% url 'getGroundmans' %}")
+   .then((result) => {
+    const groundmansListUL = document.getElementById('groundmansList');
+    groundmansListUL.innerHTML = ""; // Reset list
+ console.log(result.data)
+
+    // Group by equipment_name, then by type, and model within each type
+    if( result.data.groundmans.length === 0) {
+      groundmansListUL.innerHTML = `<li class="list-group-item mb-1 rounded">No Groundman Available</li>`;
+      return;
+    }
+    
+    result.data.groundmans.forEach((groundman) => {
+       curatorsListUL.innerHTML += `<li class="list-group-item rounded" onclick="loginGroundman('${groundman[0]}')">
+               ${groundman[1]}
+             </li>`;
+
+   
+    });
+  }).catch((error) => {
+    console.log("Error fetching Curators data:", error);
+   });
+  
+}
+  
+  let selectedMachineType=""
+ function openMachineryModal(modalType) {
+  axios.get("{% url 'machinery_data' %}")
+   .then((result) => {
+    const machineryList = document.getElementById('machineryList');
+    machineryList.innerHTML = ""; // Reset list
+    const groupedMachinery = {};
+
+    // Group by equipment_name, then by type, and model within each type
+    result.data.forEach((machine) => {
+     if (!groupedMachinery[machine.equipment_name]) {
+      groupedMachinery[machine.equipment_name] = {};
+     }
+     if (!groupedMachinery[machine.equipment_name][machine.type]) {
+      groupedMachinery[machine.equipment_name][machine.type] = [];
+     }
+     groupedMachinery[machine.equipment_name][machine.type].push(machine);
+    });
+
+    // Generate table rows
+    Object.keys(groupedMachinery).forEach((equipmentName) => {
+     // Equipment Name Row
+     const equipmentRow = document.createElement('tr');
+    
+     equipmentRow.className = `category`;
+     equipmentRow.innerHTML = `<td colspan="5" class="text-warning fs-5 fw-bold">${equipmentName}</td>`;
+     machineryList.appendChild(equipmentRow);
+  
+     const types = groupedMachinery[equipmentName];
+     Object.keys(types).forEach((type) => {
+      // Skip type if it's "NA"
+     let typeClass = ""
+     if (type == "Manual") {
+      typeClass = "Manual"
+     }
+     else if (type == "Mechanised") {
+      typeClass = "Mechanized"
+     }
+      // if (type === "NA") return;
+     equipmentRow.className = `category ${typeClass}`;
+      // Type Row
+      const typeRow = document.createElement('tr');
+      typeRow.className = `subcategory ${typeClass}`;
+      typeRow.innerHTML = `<td colspan="5" class="text-success fs-6 fw-bold ${typeClass}">${type}</td>`;
+      machineryList.appendChild(typeRow);
+
+      // Model Rows
+      types[type].forEach((machine) => {
+       // Skip rows where all fields are "NA"
+      //  if (
+      //   (machine.model === "NA" || !machine.model) &&
+
+      //   (machine.value === "NA" || !machine.value) &&
+      //   (machine.unit === "NA" || !machine.unit)
+      //  ) {
+      //   return; // Skip this entry
+      //  }
+
+       const modelRow = document.createElement('tr');
+       modelRow.className = `item-row ${typeClass}`;
+
+       // Dynamically populate columns, skipping "NA"
+       modelRow.innerHTML = `<td class="${typeClass}"></td><td class="${typeClass}">${machine.print_details}</td>`;
+       modelRow.style.cursor = "pointer";
+
+       // Click Event to set the selected machinery
+       modelRow.onclick = function () {
+
+        if (modalType == "out_roller") {
+         document.getElementById('out_machinery_id').value = machine.id;
+         document.getElementById('out_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "roller") {
+         document.getElementById('machinery_id').value = machine.id;
+         document.getElementById('machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "practice_roller") {
+         document.getElementById('practice_machinery_id').value = machine.id;
+         document.getElementById('practice_machinery_name').value =`${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "out_mover") {
+         document.getElementById('out_mover_machinery_id').value = machine.id;
+         document.getElementById('out_mover_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "mover") {
+         document.getElementById('mover_machinery_id').value = machine.id;
+         document.getElementById('mover_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "practice_mover") {
+         document.getElementById('practice_mover_machinery_id').value = machine.id;
+         document.getElementById('practice_mover_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "pp_roller") {
+         document.getElementById('pp_machinery_id').value = machine.id;
+         document.getElementById('pp_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+        else if (modalType == "pp_mover") {
+         document.getElementById('pp_mover_machinery_id').value = machine.id;
+         document.getElementById('pp_mover_machinery_name').value = `${machine.equipment_name} - Type: ${machine.print_details}`;
+        }
+
+
+
+        $('#machineryModal').modal('hide');
+       };
+
+       machineryList.appendChild(modelRow);
+      });
+     });
+
+    });
+
+    // Show the modal
+    $('#machineryModal').modal('show');
+   })
+     .then(() => {
+    // alert(selectedMachineType)
+      // Reset the selected machine type after fetching data
+      if (selectedMachineType === "Manual") {
+        console.log($("body").find(".Mechanized"))
+      $("body").find("tr.Mechanized").hide();
+       $("body").find("tr.Manual").show();
+    } else if (selectedMachineType === "Mechanized") {
+        console.log($("body").find(".Mechanized"))
+
+       $("body").find("tr.Manual").hide();
+       $("body").find("tr.Mechanized").show();
+    } else {
+      $("body").find("tr.Manual, tr.Mechanized").show(); // if needed
+    }
+    })
+   .catch((error) => {
+    console.log("Error fetching machinery data:", error);
+   });
+ }
+    
+  
+
+  $(document).ready(function () {
+        $("#roller_machine_type, #mover_machine_type, #out_roller_machine_type, #out_mover_machine_type, #pp_roller_machine_type, #pp_mover_machine_type, #practice_roller_machine_type, #practice_mover_machine_type").change(function () {
+      // alert($(this).val());
+        selectedMachineType=$(this).val().trim()
+  })
+    //$("#home-tab").css("display","none")
+    //$("#pp-tab").css("display","none")
+    //$("#profile-tab").css("display","none")
+    //$("#practice-tab").css("display","none")
+    //$("#myTabContent").css("display","none")
+    //$("#btnDailySubmit").css("display","none")
+  
+    function changeTabs(checkboxes, disabled) {
+
+      if (!disabled) {
+        //alert("not disabled")
+        $("#myTabContent").css("display", "block")
+
+      }
+      else {
+        //alert("disabled")
+        $("#myTabContent").css("display", "block")
+      }
+    }
+
+    function checkboxesTabs() {
+
+    }
+
+    $("#pitch_id").change(function () {
+      const checkboxes = $(".checkboxes").find("[type='checkbox']")
+
+      $(checkboxes).on("change", checkboxesTabs)
+
+      const pitch_location = $("#pitch_location").val().trim()
+      // if(this.options[this.selectedIndex].text.indexOf("all")>-1)
+      // {
+      //     checkboxes.prop("disabled",false)
+      //     changeTabs(checkboxes,false)
+      // }
+      // else
+      // {
+      //     checkboxes.prop("disabled",true)
+      //     changeTabs(checkboxes,true)
+      // }
+
+   
+        
+    
+     
+   
+    })
+
+
+  })
+
+function realoadMachineryList(event) {
+  
+  $(event.target).parent().parent().find("input[type='text']")[0].value=""
+ 
+}
+
+</script>
+

@@ -1,0 +1,32 @@
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+
+
+
+{% load admin_user_filters %}
+
+    <title>Update Pitches for {{ ground.name }}</title>
+
+{% include "admin_user/menu.html" %}
+    <h1>Update Pitches for {{ ground.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+      {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+    </div>
+</div>
+
+
+{% include "admin_user/footertags.html" %}

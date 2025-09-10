@@ -1,0 +1,54 @@
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+
+
+        
+                <table class="table align-middle mb-0 w-75 mx-auto rounded">
+                    <thead class="bg-light fs-5 box-bg report-table-title">
+                        <tr>
+                            <th>
+                                <h2 class="text-start">List of States and Cities</h2>
+                            </th>
+                            <th>
+
+                            </th>
+
+                            <th>
+                                <!-- <a class="btn btn-warning mb-2 text-left" href="{% url 'fertilizer_add' %}">Add New
+                                    Chemical</a> -->
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <th>State Code</th>
+                            <th>City</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for state, state_code, city in state_city_data %}
+                        <tr>
+                            <td>{{ state }}</td>
+                            <td>{{ state_code }}</td>
+                            <td>{{ city }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+          
+
+    </div>
+</div>
+
+
+{% include "admin_user/footertags.html" %}

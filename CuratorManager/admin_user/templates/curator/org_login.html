@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+    <title>Login Form</title>
+{% load static %}
+ 
+ 
+  <style>
+    .form-control
+{
+  color: white !important;
+}
+.form-control:focus
+{
+  background-color: transparent !important;
+}
+input
+  {
+   color: white;
+  }
+    body {
+    
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 70%;
+    }
+
+
+
+    .card {
+      background: transparent;
+      border-radius: 25px;
+      padding: 50px 30px;
+      width: 100%;
+      max-width: 400px;
+      color: #fffcfc;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      font-size: 80%;
+    }
+
+
+
+    .btn-rounded {
+      border-radius: 50px;
+      font-weight: bold;
+    }
+
+    .register-text {
+     
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .register-text a {
+      color: #070404;
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 70%;
+    }
+
+    .card h2 {
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-login-btn a
+    {
+      font-size: 65%;
+      margin: 2px;
+
+    }
+
+    .section-login-btn
+    {
+      display: flex;
+      justify-content: center;
+      margin-top: 10%;
+
+    }
+
+  </style>
+
+
+</head>
+
+
+
+<body class="box-gradient">
+  <form id="loginForm" class="transparent-bg"  action="/usr_admin/login_auth_role" method="post">
+    {% csrf_token %}
+    <div class="card box-bg text-white border-0">
+      <h2>CURATOR LOGIN</h2>
+
+      <div class="form-outline mb-4">
+                <input type="hidden" value="Curator" id="role" name="role" required>
+
+        <input type="text" id="org_id" name="org_id" class="form-control fs-6" />
+        <label class="form-label" for="org_id">Club/Orgnization ID</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input type="text" id="username" name="username" class="form-control fs-6" />
+        <label class="form-label" for="username">Username</label>
+      </div>
+
+      <div class="form-outline mb-4">
+        <input type="password" id="password" name="password" class="form-control fs-6" />
+        <label class="form-label" for="formPassword">Password</label>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- <div class="form-check" style="color: #3b71ca;">
+        <input class="form-check-input" type="checkbox" value="" id="rememberMe" />
+        <label class="form-check-label" for="rememberMe"> Remember Me </label>
+      </div> -->
+            <a href="#" class="" style="color: #ffffff;">Forget Password</a>
+      </div>
+
+      <button class="btn btn-dark btn-rounded w-100 border-0" style="background-color: #3b71ca;">Log in</button>
+
+      <!-- <p class="register-text mt-3">
+        Don’t have an account? <a href="#" style="color: #3b71ca;">Register</a>
+      </p> -->
+ <div class="section-login-btn fs-6">
+      <a class="btn btn-outline-light" href="/usr_admin/curator/login">Curator Login</a>
+      <a class="btn btn-outline-light" href="/usr_admin/groundman/login">Groundman Login</a>
+      <a class="btn btn-outline-light" href="/usr_admin/scorer/login">Scorer Login</a>
+    </div>
+    </div>
+    </div>
+   
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </form>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+

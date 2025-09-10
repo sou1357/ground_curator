@@ -1,0 +1,194 @@
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+ 
+ <div class="container mt-5">
+            <div class="card w-75 mx-auto transparent-bg">
+                <div class="card-header box-bg text-white">
+
+                    <i class="bi bi-person-check me-2 text-info"></i>Chemicals Consumption Report
+                </div>
+                <div class="card-body box-gradient rounded-bottom">
+  <form method="get" action="/usr_admin/fetchChemicalsReport">
+    <div class="row mb-3">
+      <div class="col-lg-4 col-sm-12">
+        <label>Ground</label>
+        <select class="form-select" id="id_ground_id" required name="ground_id"></select>
+      </div>
+      <div class="col-lg-4 col-sm-12">
+        <label>From Date</label>
+        <input type="date" name="from_date" class="form-control" value="{{ from_date }}">
+      </div>
+          <div class="col-lg-4 col-sm-12">
+        <label>To Date</label>
+        <input type="date" name="to_date" class="form-control" value="{{ to_date }}">
+      </div>
+        <div class="col-lg-4 col-sm-12">
+        <label>Select Chemical</label>
+        <select class="form-select" id="chemical" name="chemical">
+          <option value="">Select any Chemical</option>
+
+        </select>
+      </div>
+
+      <div class="col-lg-12 col-sm-12 d-flex align-items-end gap-2 mt-2">
+        <button type="submit" class="btn btn-primary box-bg">Search</button>
+        {% if records %}
+          <button type="button" id="downloadCsv" class="btn btn-success">Download CSV</button>
+          <button type="button" id="downloadPdf" class="btn btn-danger">Download PDF</button>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+ </div>
+            </div>
+
+        </div>
+        
+       
+  {% if records %}
+    <!-- Table for KG -->
+     <div class="a4-sheet w-75 rounded mt-4 mx-auto">
+   
+    <table class="table align-middle mb-0 w-75 mx-auto border-white transparent-bg rounded" id="kgTable">
+      <thead class="bg-light fs-5 box-bg report-table-title">
+         <tr>
+                            <th>
+                                 <h5 class="mt-4">Fertilizers Used in KG</h5>
+                            </th>
+                            <th>
+
+                            </th>
+
+                            
+                        </tr>
+        <tr><th>Fertilizer</th><th>Total (KG)</th></tr>
+      </thead>
+      <tbody class="transparent-bg">
+        {% for row in records %}
+          {% if row.kg %}
+            <tr><td>{{ row.chemical }}</td><td>{{ row.kg }}</td></tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Table for Liters -->
+  
+    <table class="table align-middle mb-0 mt-4 border-white transparent-bg w-75 mx-auto rounded" id="ltrTable">
+      <thead class="bg-light fs-5 box-bg report-table-title">
+         <tr>
+                            <th>
+                                 <h5 class="mt-4">Fertilizers Used in Liters</h5>
+                            </th>
+                            <th>
+
+                            </th>
+
+                          
+                        </tr>
+        <tr><th>Fertilizer</th><th>Total (Liters)</th></tr>
+      </thead>
+      <tbody>
+        {% for row in records %}
+          {% if row.ltr %}
+            <tr><td>{{ row.chemical }}</td><td>{{ row.ltr }}</td></tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-danger">No data found.</p>
+  {% endif %}
+</div>
+</div>
+</div>
+
+
+{% include "admin_user/footertags.html" %}
+
+<script>
+  $(document).ready(function () {
+    axios.get("/usr_admin/get_grounds").then(result => {
+      const dropdown = $("#id_ground_id");
+      dropdown.empty().append(`<option value="">Select Ground</option>`);
+      result.data.grounds.forEach(g => {
+        dropdown.append(`<option value="${g.ground[0]}">${g.ground[6]}</option>`);
+      });
+    });
+  });
+
+  // CSV Download Logic
+  document.getElementById("downloadCsv")?.addEventListener("click", () => {
+    let csvContent = "";
+    const tables = [document.getElementById("kgTable"), document.getElementById("ltrTable")];
+
+    tables.forEach(table => {
+      const rows = table.querySelectorAll("tr");
+      rows.forEach(row => {
+        const cols = Array.from(row.children).map(td => `"${td.innerText.trim()}"`);
+        csvContent += cols.join(",") + "\n";
+      });
+      csvContent += "\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "chemicals_report.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  // PDF Download Logic
+  document.getElementById("downloadPdf")?.addEventListener("click", () => {
+    const element = document.querySelector(".a4-sheet");
+    const opt = {
+      margin: 0.5,
+      filename: "chemicals_report.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+    };
+    html2pdf().set(opt).from(element).save();
+  });
+
+
+  
+    function addChemicalsToSelect(fertilizers, select) {
+        fertilizers.forEach(function (fert) {
+            const option = document.createElement("option");
+            option.value = fert.id;
+            option.textContent = `${fert.name} (${fert.type})`;
+            select.appendChild(option);
+        });
+    }
+
+    axios.get('/usr_admin/get-fertilizers-json/')
+        .then(function (response) {
+            const chemicals = response.data.fertilizers;
+            // console.log(fertilizers)
+            const select = document.getElementById("chemical");
+          
+            addChemicalsToSelect(chemicals, select)
+          
+
+        })
+        .catch(function (error) {
+            console.error("Error fetching fertilizers:", error);
+        });
+
+</script>
+</body>
+</html>

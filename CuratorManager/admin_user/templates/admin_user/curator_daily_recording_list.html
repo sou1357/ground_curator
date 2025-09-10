@@ -1,0 +1,1713 @@
+{% include "admin_user/headertags.html" %}
+
+{% load static %}
+
+<link href="{% static 'admin_user/css/gradient.css' %}" rel="stylesheet">
+<div class="wrapper grass-bg">
+    <!-- Sidebar -->
+    {% include "admin_user/menu_side.html" %}
+
+
+    <!-- Page Content -->
+    <div id="content" class="bg-form-page match-scores-list daily-list">
+        <!-- Navbar -->
+        {% include "admin_user/menu_top.html" %}
+
+<script>
+      $(document).ready(function () {
+
+            $(".del-btn").on('click', function (event) {
+                // alert()
+               
+                // alert($(this).attr('dataid').trim())
+                deleteDaily($(this).attr('dataid').trim());
+            })
+
+        })
+</script>
+        
+    {% load admin_user_filters %}
+   
+    <title>Curator Daily Recording List</title>
+    <div class="accordion p-4">
+        {% for recording in recordings %}
+       
+
+        <div class="accordion-item" onclick="getMachine(this)">
+            <h2 class="accordion-header" id="heading-{{ recording.0 }}">
+                <button class="accordion-button text-center" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse-{{ recording.0 }}" aria-expanded="true"
+                    aria-controls="collapse-{{ recording.0 }}">
+                    <span class="fs-5 fw-bolder me-2 text-dark record-type"  style="text-transform: uppercase;">
+                                    {% if recording.2 == "all area" %}
+                                        All Area
+                                
+                                     {% else %}
+                                     {{recording.2}}
+                                    {% endif %}</span>
+                    <span class="pe-3">  <b class="td-ground fs-6">{{ recording.63 }} <span class="text-warning">({{ recording.0 }})</span></b></span>
+                    
+                    
+                    <span class="pe-4 fs-6"> <b class="">Date</b><small><br> {{ recording.3 }}</small></span>
+                    <span class="pe-4 fs-6"> <b class="fs-6">Actual Entry Date-time</b><small><br> {{ recording.59 }}</small></span>
+                    <span class="fs-6"> <b>Record Updated Date-time</b><small><br> {{ recording.60 }}</small></span>
+
+                   
+                </button>
+            </h2>
+
+            <div id="collapse-{{ recording.0 }}" class="accordion-collapse collapse"
+                aria-labelledby="heading{{ recording.0 }}" data-bs-parent="#accordionDR">
+                <div class="accordion-body">
+                    <div class="table-responsive transparent-bg">
+                  <a class="btn btn-success mx-2" href="{% url 'update_daily' recording.0 %}">UPDATE</a>
+                    <!-- <input class="btn btn-danger del-btn" dataid="{{recording.0}}" value="DELETE" type="button"/> -->
+                    <div class="row mt-2">
+                        <div class="col-sm-12 col-lg-12">
+                             <div class="bg-primary fs-5 m-0 text-center py-3">General</div>
+                            <table class="table table-bordered border">
+                                 <tr>
+            <th>ID</th>
+            <th>Pitch</th>
+            <th>Ground</th>
+            <!-- <th>Pitch Location</th> -->
+            <th>Date</th>
+            <th>Minimum Temperature</th>
+            <th>Maximum Temperature</th>
+            <th>Forecast</th>
+            <th>Clagg Hammer</th>
+            <th>Moisture</th>
+        </tr>
+        
+          <tr>
+            <td>{{ recording.0 }}</td>
+            <td>{{ recording.61}} {{ recording.62}}</td>
+            <td class="td-ground">{{ recording.63 }}</td>
+            <!-- <td>{{ recording.2 }}</td> -->
+            <td>{{ recording.3 }}</td>
+            <td>{{ recording.4 }}</td>
+            <td>{{ recording.5 }}</td>
+            <td>{{ recording.6 }}</td>
+            <td>{{ recording.7 }}</td>
+            <td>{{ recording.8 }}</td>
+        </tr>
+                             
+                            </table>
+                        </div>
+                  
+
+                        {% if recording.70 == "1" %}
+                         <details class="summary-shadow transparent-bg  box-bg rounded">
+                                                                    <summary class="rounded-0">Main Pitch</summary>
+                        <div class="col-sm-12 col-lg-12 transparent-bg border p-0">
+                         
+                            
+                           
+                            <table class="table table-bordered caption-top">
+                                 <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">Watering
+                                </caption>
+                                <tr>
+                                    <th>Watering On</th>
+                                    <th>Time</th>
+                                    <th>Quantity (Liters)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.12|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                  
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.14|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                      <td>
+                                         
+                                        <table>
+                                             {% for item in recording.13|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                              
+                                </table> 
+                            <table class="table table-bordered caption-top">
+                                <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Rolling
+                                </caption>
+                                <tr>
+                                    <td>Machinery</td>
+                                    <td>Time</td>
+                                    <td>No. of Passes</td>
+                                    <td>Speed</td>
+                                </tr>
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.9|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.15|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.10|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.11|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                              
+                                </table>
+                                <table class="table table-bordered caption-top">
+                                     <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Mowing
+                                </caption>
+                                <tr>
+                                 
+                                    <td>Mower Machinery ID</td>
+                                    <td>Date</td>
+                                    <td>Time of Application Mower</td>
+                                    <td>Mowing Done at MM</td>
+                                  
+                                </tr>
+                                <tr>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.16|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr class="machinery-id">
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.17|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.18|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.19|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                </tr>
+                            
+                              </table>
+                            
+                                <table class="table table-bordered caption-top">
+ 
+                                     <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Chemicals
+                                </caption>
+                                <tr>
+                                   
+                                   
+                                    <th colspan="3">Chemical Details</th>
+                                    <th>Time</th>
+                                    <th>Chemical Remarks</th>
+                                </tr>
+                                <tr>
+                                   <td>
+                                         
+                                        <table>
+                                             {% for item in recording.21|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="chemical-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endif %}
+                                            {% endfor %}
+                                          </table>
+                                          </td>
+                                    <td>
+                                             <table>
+                                             {% for item in recording.93|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                             </table>
+                                             </td> 
+                                    <td>
+                                              <table>
+                                             {% for item in recording.92|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+
+                                    <td>
+                                       <table>
+                                             {% for item in recording.54|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td>
+                                       <table>
+                                             {% for item in recording.22|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+
+
+                                </tr>
+                               
+                                
+                           
+                             
+                                <tr>
+                                    <th>Remark by Groundsman</th>
+                                    <td colspan="4">{{ recording.23 }}</td>
+                                </tr>
+                                </table>
+                               
+                            </div>
+                            </details>
+                            {% endif %}
+                            {% if recording.71 == "1" %}
+                            <details class="summary-shadow transparent-bg  box-bg rounded">
+                                                                    <summary class="rounded-0">Practice Pitch</summary>
+                            <div class="col-sm-12 transparent-bg col-lg-12">
+                                 <div class="bg-primary fs-5 m-0 text-center py-3">Practice Pitch</div>
+                            
+                           
+                            <table class="table table-bordered caption-top">
+                               <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Watering
+                                </caption>
+                                  <tr>
+                                    <th>Watering On</th>
+                                    <th>Time</th>
+                                    <th>Quantity (Liters)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.77|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                  
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.79|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                      <td>
+                                         
+                                        <table>
+                                             {% for item in recording.78|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                                 <!-- <tr>
+                                    <th>Last Watering On</th>
+                                    <td>
+                                        <td>
+                                          <ul>
+                                            {% for item in recording.77|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                         </td>
+                                      </td>
+                                </tr>
+                                <tr>
+                                    <th>Quantity of Water</th>
+                                    <td>
+                                        <td>
+                                          <ul>
+                                            {% for item in recording.78|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                         </td>
+                                      </td>
+                                </tr>
+                                <tr>
+                                    <th>Time of Application</th>
+                                    <td>
+                                      
+                                        <td>
+                                          <ul>
+                                            {% for item in recording.79|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                         </td>
+                                      </td>
+                                </tr> -->
+                                </table> 
+                            <table class="table table-bordered caption-top">
+                                  <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Rolling
+                                </caption>
+                                 <tr>
+                                    <td>Machinery</td>
+                                    <td>Time</td>
+                                    <td>No. of Passes</td>
+                                    <td>Speed</td>
+                                </tr>
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.74|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.80|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.75|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.76|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <th>Machinery ID</th>
+                                    <td>
+                                          <ul>
+                                            {% for item in recording.90|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                         </td>
+                                </tr>
+                                <tr>
+                                    <th>No of Passes</th>
+                                    <td>
+                                          <ul>
+                                            {% for item in recording.75|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Rolling Speed</th>
+                                    <td>
+                                        <ul>
+                                            {% for item in recording.76|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                    </td>
+                                </tr>
+                               
+                                <tr>
+                                    <th>Time Roller</th>
+                                    <td>
+                                         <ul>
+                                            {% for item in recording.80|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                    </td>
+                                </tr> -->
+                                </table>
+                                <table class="table table-bordered caption-top">
+                                     <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Mowing
+                                </caption>
+                                  <tr>
+                                 
+                                    <td>Mower Machinery ID</td>
+                                    <td>Date</td>
+                                    <td>Time of Application Mower</td>
+                                    <td>Mowing Done at MM</td>
+                                  
+                                </tr>
+                                <tr>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.81|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr class="machinery-id">
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.82|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.83|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.84|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                </tr>
+                                <!-- <tr>
+                                    
+                                    <th>Mower Machinery ID</th>
+                                    <td>
+                                         <ul>
+                                            {% for item in recording.91|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Date Mowing Done Last</th>
+                                    <td>
+                                         <ul>
+                                            {% for item in recording.82|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                       </td>
+                                </tr>
+                                <tr>
+                                    <th>Time of Application Mower</th>
+                                    <td>
+                                        <ul>
+                                            {% for item in recording.83|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul></td>
+                                </tr>
+                                <tr>
+                                    <th>Mowing Done at MM</th>
+                                    <td>
+                                         <ul>
+                                            {% for item in recording.84|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul></td>
+                                </tr> -->
+                                </table>
+                                <table class="table table-bordered caption-top">
+ 
+                                     <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Chemicals
+                                </caption>
+                                   <tr>
+                                   
+                                   
+                                    <th colspan="3">Chemical Details</th>
+                                    <th>Time</th>
+                                    <th>Chemical Remarks</th>
+                                </tr>
+                                <tr>
+                                   <td>
+                                         
+                                        <table>
+                                             {% for item in recording.86|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="chemical-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endif %}
+                                            {% endfor %}
+                                          </table>
+                                          </td>
+                                    <td>
+                                             <table>
+                                             {% for item in recording.94|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                             </table>
+                                             </td> 
+                                    <td>
+                                              <table>
+                                             {% for item in recording.95|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+
+                                    <td>
+                                       <table>
+                                             {% for item in recording.89|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td>
+                                       <table>
+                                             {% for item in recording.87|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+
+
+                                </tr>
+                               
+                                <tr>
+                                    <th>Remark by Groundsman</th>
+                                    <td colspan="4">{{ recording.88 }}</td>
+                                </tr>
+                           
+                                </table>
+                               
+                          
+                            </div>
+                          
+                             </details>
+                                {% endif %}
+                            
+                            {% if recording.72 == "1" %}
+                            <details class="summary-shadow transparent-bg  box-bg rounded">
+                                                                    <summary class="rounded-0">Outfield</summary>
+                                <div class="col-sm-12 transparent-bg col-lg-12">
+                                      <div class="bg-primary fs-5 m-0 text-center py-3">Outfield</div>
+                            
+                           
+                            <table class="table table-bordered caption-top">
+                                 <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Watering
+                                </caption>
+                                   <tr>
+                                    <th>Watering On</th>
+                                    <th>Time</th>
+                                    <th>Quantity (Liters)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.27|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                  
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.29|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                      <td>
+                                         
+                                        <table>
+                                             {% for item in recording.28|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                              
+                                </table> 
+                            <table class="table table-bordered caption-top">
+                                 <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Rolling
+                                </caption>
+                                 <tr>
+                                    <td>Machinery</td>
+                                    <td>Time</td>
+                                    <td>No. of Passes</td>
+                                    <td>Speed</td>
+                                </tr>
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.24|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.30|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.25|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.26|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                              
+                                </table>
+                                <table class="table table-bordered caption-top">
+                                      <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Mowing
+                                </caption>
+                                   <tr>
+                                 
+                                    <td>Mower Machinery ID</td>
+                                    <td>Date</td>
+                                    <td>Time of Application Mower</td>
+                                    <td>Mowing Done at MM</td>
+                                  
+                                </tr>
+                                <tr>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.31|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr class="machinery-id">
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.32|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.33|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.34|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                </tr>
+                              
+                                </table>
+                                <table class="table table-bordered caption-top">
+ 
+                                      <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Chemicals
+                                </caption>
+                                 <tr>
+                                   
+                                   
+                                    <th colspan="3">Chemical Details</th>
+                                    <th>Time</th>
+                                    <th>Chemical Remarks</th>
+                                </tr>
+                                <tr>
+                                   <td>
+                                         
+                                        <table>
+                                             {% for item in recording.36|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="chemical-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endif %}
+                                            {% endfor %}
+                                          </table>
+                                          </td>
+                                    <td>
+                                             <table>
+                                             {% for item in recording.96|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                             </table>
+                                             </td> 
+                                    <td>
+                                              <table>
+                                             {% for item in recording.97|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+
+                                    <td>
+                                       <table>
+                                             {% for item in recording.55|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td>
+                                       <table>
+                                             {% for item in recording.37|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+
+
+                                </tr>
+                            
+                                
+                         
+                             
+                                <tr>
+                                    <th>Remark by Groundsman</th>
+                                    <td colspan="4">{{ recording.38 }}</td>
+                                </tr>
+                                </table>
+<!-- 
+                                    <table class="table table-bordered">
+                                        <caption class="caption caption-top fw-bolder bg-dark text-white text-center">Outfield</caption>
+                                        <tr>
+                                            <th>Machinery ID</th>
+                                            <td>{{ recording.66 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>No. of Passes</th>
+                                            <td>{{ recording.25 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Rolling Speed</th>
+                                            <td>{{ recording.26 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Watering On</th>
+                                            <td>{{ recording.27 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Quantity of Water</th>
+                                            <td>{{ recording.28 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Time of Application</th>
+                                            <td>{{ recording.29 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Time Roller</th>
+                                            <td>{{ recording.30 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Mover Machinery ID</th>
+                                            <td>{{ recording.67 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date Mowing Done Last</th>
+                                            <td>{{ recording.32 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Time of Application Out Mover</th>
+                                            <td>{{ recording.33 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Mowing Done at MM</th>
+                                            <td>{{ recording.34 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Is Fertilizers Used</th>
+                                            <td>
+
+                                                {% if recording.35 == "1" %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                            </td>
+                                        </tr>
+                                                      
+                                <tr>
+                                    <th>Fertilizers Details</th>
+                                    <td>
+
+                                        <ul>
+                                            {% for item in recording.36|split_by_delimiter %}
+                                              {% if item.strip %}
+                                                <li>{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+
+                                    </td>
+                                    <td>
+
+                                        <ul>
+                                            {% for item in recording.96|split_by_delimiter %}
+                                              {% if item %}
+                                                <li style="list-style-type: none;">{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+
+                                    </td>
+                                    <td>
+
+                                        <ul>
+                                            {% for item in recording.97|split_by_delimiter %}
+                                              {% if item %}
+                                                <li style="list-style-type: none;">{{ item }}</li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+
+                                    </td>
+                                </tr>
+                                         <tr>
+                                            <th>Fertilizers Details</th>
+                                            <td>{{ recording.36 }}</td>
+                                        </tr> 
+                                        <tr>
+                                            <th>Chemical Details Remark</th>
+                                            <td>{{ recording.37 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Remark by Groundsman</th>
+                                            <td>{{ recording.38 }}</td>
+                                        </tr>
+                                        </table>
+                                         -->
+                                  
+                                        </div>
+                                         </details>
+                                    {% endif %}
+                                    {% if recording.73 == "1" %}
+                                    <details class="summary-shadow transparent-bg  box-bg rounded">
+                                                                    <summary class="rounded-0">Practice Area</summary>
+                                        <div class="col-sm-12 transparent-bg col-lg-12">
+                                           
+                            
+                           
+                            <table class="table table-bordered caption-top">
+                               <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Watering
+                                </caption>
+                                 <tr>
+                                    <th>Watering On</th>
+                                    <th>Time</th>
+                                    <th>Quantity (Liters)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.42|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                  
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.44|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                      <td>
+                                         
+                                        <table>
+                                             {% for item in recording.43|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                          
+                                </table> 
+                            <table class="table table-bordered caption-top">
+                                  <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Rolling
+                                </caption>
+                                 <tr>
+                                    <td>Machinery</td>
+                                    <td>Time</td>
+                                    <td>No. of Passes</td>
+                                    <td>Speed</td>
+                                </tr>
+                                <tr>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.39|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="machinery-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.45|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                    <td>
+                                         
+                                        <table>
+                                             {% for item in recording.40|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                     <td>
+                                         
+                                        <table>
+                                             {% for item in recording.41|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                                </table>
+                                <table class="table table-bordered caption-top">
+                                    <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Mowing
+                                </caption>
+                                  <tr>
+                                 
+                                    <td>Machinery</td>
+                                    <td>Date</td>
+                                    <td>Time of Application</td>
+                                    <td>Mowing Done at MM</td>
+                                  
+                                </tr>
+                                <tr>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.46|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr class="machinery-id">
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.47|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.48|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                      <td>
+                                          
+                                          <table>
+                                              {% for item in recording.49|split_by_delimiter %}
+                                                {% if item.strip %}
+                                              <tr>
+                                                  <td>
+                                                      {{ item }}
+                                                  </td>
+                                              </tr>
+                                                {% endif %}
+                                              {% endfor %}
+                                          </table>
+                                          
+                                      </td>
+                                </tr>
+                            
+                             
+                                </table>
+                                <table class="table table-bordered caption-top">
+ 
+                                     <caption class="caption caption-top fw-bolder fs-5 text-warning bg-dark text-center">
+                                    Chemicals
+                                </caption>
+                                   <tr>
+                                   
+                                   
+                                    <th colspan="3">Chemical Details</th>
+                                    <th>Time</th>
+                                    <th>Chemical Remarks</th>
+                                </tr>
+                                <tr>
+                                   <td>
+                                         
+                                        <table>
+                                             {% for item in recording.51|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr class="chemical-id">
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endif %}
+                                            {% endfor %}
+                                          </table>
+                                          </td>
+                                    <td>
+                                             <table>
+                                             {% for item in recording.98|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                             </table>
+                                             </td> 
+                                    <td>
+                                              <table>
+                                             {% for item in recording.99|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                        
+                                    </td>
+
+                                    <td>
+                                       <table>
+                                             {% for item in recording.56|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td>
+                                       <table>
+                                             {% for item in recording.52|split_by_delimiter %}
+                                              {% if item.strip %}
+                                            <tr>
+                                                <td>
+                                                    {{ item }}
+                                                </td>
+                                            </tr>
+                                              {% endif %}
+                                             {% endfor %}
+                                        </table>
+                                    </td>
+
+
+                                </tr>
+                               
+                             
+                             
+                                <tr>
+                                    <th>Remark by Groundsman</th>
+                                    <td colspan="4">{{ recording.23 }}</td>
+                                </tr>
+                                </table>
+                                          
+                                            </div>
+                                            </details>
+                                            {% endif %}
+                                            </div>
+                    </div>
+                      </div> 
+                      
+               
+                </div>
+            </div>
+    
+
+       
+        {% endfor %}
+        </div>
+
+    </div>
+    </div>
+
+
+
+{% include "admin_user/footertags.html" %}
+    <script>
+        changeMenuTitle("Curator Daily Recording List")
+
+        function deleteDaily(dailyId) {
+            if (confirm('Are you sure you want to delete this Daily Record?')) {
+                axios.delete(`/usr_admin/delete_daily/${dailyId}`)
+                    .then(function (response) {
+                        // fetchScores("{{match.0}}");
+                        alert('Daily deleted successfully!');
+                        // Refresh the scores list
+
+                        location.reload();
+
+                    })
+                    .catch(function (error) {
+                        console.error('Error deleting Daily:', error);
+                    });
+            }
+        }
+
+          function getChemical(div) {
+            const chemicalli = $(div).find(".chemical-id td")
+
+            Array.from(chemicalli).forEach(li => {
+                let id=$(li).text().trim()
+
+                axios.get(`/usr_admin/get_chemical/${id}`).then((result) => {
+                    const chem = result.data
+
+                    $(li).html(chem.name)
+
+                }).catch((error) => {
+                    console.log(error)
+
+                })
+            });
+
+        }
+
+  function getMachine(div) {
+          console.log(div)
+            const liMach = $(div).find(".machinery-id td")
+
+            Array.from(liMach).forEach(li => {
+                let id=$(li).text().trim()
+
+                axios.get(`/usr_admin/machinery/${id}`).then((result) => {
+                    const m = result.data.machinery
+
+                    $(li).html(m.print_details)
+
+                }).catch((error) => {
+                    console.log(error)
+
+                })
+            });
+ getChemical(div)
+            
+        }
+      
+
+        // newRow.querySelector('.del-btn').addEventListener('click', function () {
+          
+        // });
+
+   /*     function getGround() {
+            const tdGround = document.querySelectorAll(".td-ground")
+
+            tdGround.forEach(td => {
+                let id=$(td).text().trim()
+
+                axios.get(`/usr_admin/get_ground/${id}`).then((result) => {
+                    const ground = result.data.ground
+
+                    $(td).html(ground[6])
+
+                }).catch((error) => {
+                    console.log(error)
+
+                })
+            });
+
+        }
+
+        getGround() */
+
+    </script>
+
+
+
+</body>
+
+
+</html>
